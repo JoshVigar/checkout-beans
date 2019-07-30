@@ -12,9 +12,14 @@ pricing_rules =
       }
 checkout = Checkout_dynamic.new(pricing_rules)
 
-list = Discounts.new({ "orange" => [2,1] })
-list.add_offer({ "apple" => [2,1] })
-puts list.discounts_hash
+multi = Multiples_discounts.new({ :orange => [2,1] })
+multi.add_multi(:apple, 2, 1)
+puts multi.discounts_hash
 
-checkout.scan(:apple)
-puts checkout.total(list.discounts_hash)
+perc = Percentage_discounts.new({ :banana => 0.5 })
+perc.add_perc(:pear, 50)
+puts perc.discounts_hash
+
+2.times{checkout.scan(:apple)}
+2.times{checkout.scan(:banana)}
+puts checkout.total(multi.discounts_hash, perc.discounts_hash)

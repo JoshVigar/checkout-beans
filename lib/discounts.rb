@@ -14,18 +14,20 @@ class Discounts
 
 end
 
-# class Multiples_discounts < Discounts
-#
-#   def initialize(hash)
-#
-#   end
-#
-# end
-#
-# class Percentage_discounts < Discounts
-#
-#   def initialize(hash)
-#
-#   end
-#
-# end
+class Multiples_discounts < Discounts
+
+  def add_multi(item, buy, free)
+    offer = {item => [buy, free]}
+    self.add_offer(offer)
+  end
+
+end
+
+class Percentage_discounts < Discounts
+
+  def add_perc(item, percentage)
+    offer = {item => percentage/100.0 }
+    self.add_offer(offer)
+  end
+
+end
