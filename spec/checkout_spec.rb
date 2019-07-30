@@ -100,5 +100,15 @@ RSpec.describe Checkout do
         expect(total).to eq(600)
       end
     end
+
+    context 'when a half price offer is dynamically added to mangos' do
+      before do
+        3.times { checkout.scan(:mango) }
+      end
+
+      it 'returns the discounted price for the basket' do
+        expect(total).to eq(300)
+      end
+    end
   end
 end
