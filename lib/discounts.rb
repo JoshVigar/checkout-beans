@@ -24,8 +24,10 @@ class Multiples_discounts < Discounts
 
   # add_multi uses the item, the amount necessary to apply the offer, and number
   # of free items eg. Buy 2 get one free on pears = add_multi(:pear, 2, 1)
-  def add_multi(item, buy, free)
-    offer = {item => [(buy+1), (buy-free)]}
+  # The restrict parameter is used to define the maximum amount of times the
+  # offer can be used per customer, it is optional, default of 0 (unlimited)
+  def add_multi(item, buy, free, restrict=0)
+    offer = {item => [(buy+1), (buy-free+1), restrict]}
     # add the offer to the multples discount hash
     self.add_offer(offer)
   end

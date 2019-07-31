@@ -29,6 +29,10 @@ class Checkout_dynamic
         end
         # For a multibuy discount the total is the price of the items multiplied by the (items paid for/total items)
         total += prices.fetch(item) * count * (multi[item][1])/(multi[item][0]).to_f * multiplier
+        # add back the price if the restriction on offers has been exceeded
+        if multi[item][2] != 0
+          total += (prices.fetch(item)) * (count - multi[item][2])
+        end
       elsif perc[item] != nil
         # for a percentage discount the total is the price of the item multiplied by the percentage discount/100
         total += prices.fetch(item)* perc[item] * count
