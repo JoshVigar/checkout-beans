@@ -21,21 +21,29 @@ class Checkout_dynamic
     basket.inject(Hash.new(0)) { |items, item| items[item] += 1; items }.each do |item, count|
       # if the item has a multibuy discount then apply the discount
       if multi[item] != nil && (count % multi[item][0] == 0)
+        # amount variable is needed to determine how many items are discounted based on any restrictions
+        amount = count
+        if multi[item][2] != 0
+          total += (prices.fetch(item)) * (count - (multi[item][2] * multi[item][0]))
+          amount = (multi[item][2] * multi[item][0])
+        end
         #this multiplier is used to apply a percentage discount to a multibuy
         # discount if both are valid
         multiplier = 1
         if perc[item] != nil
-          multiplier = perc[item]
+          multiplier = perc[item][0]
         end
         # For a multibuy discount the total is the price of the items multiplied by the (items paid for/total items)
-        total += prices.fetch(item) * count * (multi[item][1])/(multi[item][0]).to_f * multiplier
-        # add back the price if the restriction on offers has been exceeded
-        if multi[item][2] != 0
-          total += (prices.fetch(item)) * (count - multi[item][2])
-        end
+        total += prices.fetch(item) * amount * (multi[item][1])/(multi[item][0]).to_f * multiplier
       elsif perc[item] != nil
+        # amount variable is needed to determine how many items are discounted based on any restrictions
+        amount = count
+        if perc[item][1] != 0
+          total += (prices.fetch(item)) * (count - perc[item][1])
+          amount = perc[item][1]
+        end
         # for a percentage discount the total is the price of the item multiplied by the percentage discount/100
-        total += prices.fetch(item)* perc[item] * count
+        total += prices.fetch(item)* perc[item][0] * amount
       else
         # if no discounts are valid, total is simply the item multiplied by the price
         total += prices.fetch(item) * count

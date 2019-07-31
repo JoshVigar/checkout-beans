@@ -4,7 +4,7 @@ require 'discounts'
 
 RSpec.describe Checkout_dynamic do
   describe '#total' do
-    subject(:total) { checkout.total(:multibuy, :percentage) }
+    subject(:total) { checkout.total(multibuy.discounts_hash, percentage.discounts_hash) }
 
     let(:checkout) { Checkout_dynamic.new(pricing_rules) }
     let(:pricing_rules) {
@@ -66,6 +66,7 @@ RSpec.describe Checkout_dynamic do
 
       context 'and there are other discounted items' do
         before do
+          percentage.add_perc(:banana, 50)
           checkout.scan(:banana)
         end
 
@@ -88,7 +89,7 @@ RSpec.describe Checkout_dynamic do
 
     context 'when a half price offer applies on pineapples restricted to 1 per customer' do
       before do
-        multibuy.add_multi(:apple, 1, 1, 1)
+        percentage.add_perc(:pineapple, 50, 1)
         checkout.scan(:pineapple)
         checkout.scan(:pineapple)
       end

@@ -6,7 +6,8 @@ class Discounts
   attr_reader :discounts_hash
 
   # discounts_hash contains items and their associated discounts
-  def initialize(hash)
+  # can initialize with a premade discount hash but will default to {}
+  def initialize(hash={})
     @discounts_hash = hash
   end
 
@@ -41,8 +42,8 @@ class Percentage_discounts < Discounts
 
   # add_perc uses the item and a percentage discount desired
   # eg. 50% off on mangos = add_perc(:mango, 50)
-  def add_perc(item, percentage)
-    offer = {item => percentage/100.0 }
+  def add_perc(item, percentage, restrict=0)
+    offer = {item => [percentage/100.0, restrict] }
     # add the offer to the percentage discount hash
     self.add_offer(offer)
   end
